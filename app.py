@@ -98,13 +98,6 @@ Let’s begin our conversation!
 #   SPECIAL QUERY HANDLER
 # ==============================
 def handle_special_queries(user_text: str, chat_history: list) -> str or None:
-    """
-    1. If user specifically asks "Who created this chatbot?", respond with details 
-       about Nandesh Kalashetti (short or long version).
-    2. If user asks "What's my previous question?" or "What was my previous question?",
-       respond with the last user query from conversation history if it exists.
-    3. Otherwise, return None so the LLM can handle it.
-    """
     text_lower = user_text.lower()
 
     # 1. "Who created this chatbot?" (short or long)
@@ -136,14 +129,8 @@ def handle_special_queries(user_text: str, chat_history: list) -> str or None:
     return None
 
 def get_last_user_query(chat_history: list) -> str or None:
-    """
-    Scans chat_history from the end to find the most recent user message 
-    (excluding the very last one, which is the current user query).
-    """
     if len(chat_history) < 2:
         return None
-
-    # We'll skip the very last entry because that's the current user query
     for i in range(len(chat_history) - 2, -1, -1):
         entry = chat_history[i]
         if entry["role"] == "user":
@@ -157,7 +144,7 @@ nest_asyncio.apply()
 
 def main():
     st.set_page_config(
-        page_title="Enterprise MathPal",
+        page_title="Cosmic Math Universe",
         layout="wide",
         page_icon="🧮"
     )
@@ -172,7 +159,8 @@ def main():
         font-family: 'Inter', sans-serif;
     }
     body {
-        background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
+        /* Vibrant gradient background */
+        background: linear-gradient(120deg, #f093fb, #f5576c);
         margin: 0;
         padding: 0;
     }
@@ -191,12 +179,14 @@ def main():
         font-size: 3rem;
         font-weight: 700;
         margin-bottom: 12px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
     }
     .chat-subtitle {
         text-align: center;
-        color: #f0f0f0;
+        color: #ffffff;
         font-size: 1.2rem;
         margin-bottom: 20px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     }
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(20px); }
@@ -208,7 +198,7 @@ def main():
         font-size: 1rem !important;
     }
     .user-bubble {
-        background-color: #2980B9;
+        background-color: #9b59b6; /* Rich purple for user messages */
         color: #fff;
         padding: 12px 18px;
         border-radius: 16px;
@@ -221,7 +211,7 @@ def main():
         margin-bottom: 6px;
     }
     .assistant-bubble {
-        background-color: #ECF0F1;
+        background-color: #fdfdfd;
         color: #333;
         padding: 12px 18px;
         border-radius: 16px;
@@ -234,7 +224,32 @@ def main():
         margin-bottom: 6px;
     }
     [data-testid="stSidebar"] {
-        background-color: rgba(44,62,80,0.9) !important;
+        background-color: rgba(44,62,80,0.95) !important;
+    }
+    .modern-search-title {
+        color: #ffffff;
+        font-size: 1.1rem;
+        margin-bottom: 5px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    }
+    .modern-search-input {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 8px;
+        width: 100%;
+        font-size: 0.95rem;
+        margin-bottom: 10px;
+    }
+    .modern-search-input:focus {
+        outline: none;
+        border-color: #9b59b6;
+        box-shadow: 0 0 3px rgba(155,89,182,0.5);
+    }
+    .modern-history-title {
+        color: #ffffff;
+        font-size: 1.1rem;
+        margin-top: 15px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     }
     </style>
     """, unsafe_allow_html=True)
@@ -243,9 +258,9 @@ def main():
     #       SIDEBAR
     # ===========================
     with st.sidebar:
-        st.title("Enterprise MathPal 🏢🔢")
+        st.title("Cosmic Math Universe")
         st.markdown("""
-**An enterprise-grade mathematics platform** with:
+**A cosmic mathematics platform** with:
 - Rigorous, step-by-step solutions in LaTeX
 - Dynamic Plotly visualizations
 - Multi-turn context-aware conversation
@@ -253,9 +268,9 @@ def main():
 
 ---
 """)
-        # Math concept search
-        st.subheader("Search Math Concepts")
-        concept_query = st.text_input("Enter a concept (e.g., 'derivative rules')")
+        # Modern search for math concepts
+        st.markdown("<div class='modern-search-title'>Explore Key Formulas & Concepts</div>", unsafe_allow_html=True)
+        concept_query = st.text_input("", placeholder="Type e.g. 'derivative rules' or 'class 12 formulas'...")
         if concept_query:
             lower_query = concept_query.strip().lower()
             if lower_query in MATH_CONCEPTS:
@@ -264,9 +279,8 @@ def main():
                 st.warning("Concept not found. Try 'derivative rules', 'class 11 formulas', etc.")
 
         st.markdown("---")
-        st.subheader("Conversation History")
+        st.markdown("<div class='modern-history-title'>Conversation History</div>", unsafe_allow_html=True)
         if "chat_history" in st.session_state and st.session_state["chat_history"]:
-            # Show only user queries
             user_queries = [item["content"] for item in st.session_state["chat_history"] if item["role"] == "user"]
             if user_queries:
                 for i, q in enumerate(user_queries, 1):
@@ -286,8 +300,8 @@ def main():
     # ===========================
     st.markdown("""
     <div class='chat-container'>
-      <h1 class='chat-title'>Enterprise MathPal</h1>
-      <p class='chat-subtitle'>Ask advanced math questions, request visualizations, or search math concepts. Enjoy clear, rigorous solutions!</p>
+      <h1 class='chat-title'>Cosmic Math Universe</h1>
+      <p class='chat-subtitle'>Ask advanced math questions, request visualizations, or browse helpful formulas.</p>
     """, unsafe_allow_html=True)
 
     if "chat_history" not in st.session_state:
@@ -307,7 +321,7 @@ def main():
     # ===========================
     #       CHAT INPUT
     # ===========================
-    user_input = st.chat_input("Type your advanced math query here (e.g., 'Solve x^2=4' or 'Plot x^2 from -2 to 2')")
+    user_input = st.chat_input("Type your math question here (e.g., 'Solve x^2=4' or 'Plot x^2 from -2 to 2')")
 
     if user_input and user_input.strip():
         # Display user's message
@@ -318,10 +332,9 @@ def main():
         # Check if user asked a special query
         special_reply = handle_special_queries(user_input, st.session_state["chat_history"])
         if special_reply is not None:
-            # We skip the LLM and respond with the special reply
             assistant_response = special_reply
         else:
-            # Attempt to parse a plot command before calling the LLM
+            # Attempt to parse a plot command
             plot_generated = False
             plot_figure = None
             parsed_plot = parse_plot_command(user_input)
@@ -330,7 +343,6 @@ def main():
                 plot_generated = True
 
             with st.spinner("Processing your request..."):
-                # Build the message list for the LLM including multi-turn context
                 messages = [{"role": "system", "content": SYSTEM_PROMPT}]
                 for entry in st.session_state["chat_history"]:
                     messages.append({"role": entry["role"], "content": entry["content"]})
@@ -349,7 +361,6 @@ def main():
                 st.plotly_chart(plot_figure, use_container_width=True)
                 assistant_response += "\n\n(Generated a dynamic Plotly graph based on your request.)"
 
-        # Display final assistant response
         st.session_state["chat_history"].append({"role": "assistant", "content": assistant_response})
         with st.chat_message("assistant"):
             st.markdown(f"<div class='assistant-bubble'>{assistant_response}</div>", unsafe_allow_html=True)
@@ -358,10 +369,6 @@ def main():
 #    PLOT HELPER FUNCTIONS
 # ===========================
 def parse_plot_command(text):
-    """
-    Parses commands like 'plot x^2 from -2 to 2'
-    Returns a tuple (expr_str, x_min, x_max) if matched, else None.
-    """
     text_lower = text.lower()
     if "plot" not in text_lower:
         return None
@@ -377,9 +384,6 @@ def parse_plot_command(text):
     return None
 
 def generate_plot(expr_str, x_min, x_max):
-    """
-    Generates a Plotly plot for the given expression and x-range.
-    """
     x = sympy.Symbol('x', real=True)
     try:
         parsed_expr = parse_expr(expr_str, transformations=sympy.parsing.sympy_parser.standard_transformations)
