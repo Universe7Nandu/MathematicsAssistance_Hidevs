@@ -1,6 +1,6 @@
-streamlit>=1.0.0
-langchain_groq>=0.2.4
+streamlit>=1.43.0
+langchain-groq>=0.2.4
 nest_asyncio>=1.6.0
-plotly>=5.0.0
-sympy>=1.8
-numpy>=1.19.0
+plotly>=5.16.0
+sympy>=1.9
+numpy>=1.23.5
