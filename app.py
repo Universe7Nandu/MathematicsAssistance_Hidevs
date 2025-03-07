@@ -305,7 +305,7 @@ def main():
                         st.success(f"**Extracted Question**:\n\n{extracted_text.strip()}")
                         if st.button("Use This as My Question"):
                             st.session_state["chat_history"].append({"role": "user", "content": extracted_text})
-                            with st.chat_message("user", avatar="👤 user-avatar"):
+                            with st.chat_message("user", avatar="👤"):
                                 st.markdown(f"<div class='user-bubble'>{extracted_text}</div>", unsafe_allow_html=True)
                     else:
                         st.warning("No readable text detected. Try a clearer image.")
@@ -339,11 +339,11 @@ def main():
     for msg in st.session_state["chat_history"]:
         if msg["role"] == "user":
             # Show user message with user avatar
-            with st.chat_message("user", avatar="👤 user-avatar"):
+            with st.chat_message("user", avatar="👤"):
                 st.markdown(f"<div class='user-bubble'>{msg['content']}</div>", unsafe_allow_html=True)
         else:
             # Show assistant message with assistant avatar
-            with st.chat_message("assistant", avatar="🤖 assistant-avatar"):
+            with st.chat_message("assistant", avatar="🤖"):
                 st.markdown(f"<div class='assistant-bubble'>{msg['content']}</div>", unsafe_allow_html=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
@@ -356,7 +356,7 @@ def main():
     if user_input and user_input.strip():
         # Show user's message
         st.session_state["chat_history"].append({"role": "user", "content": user_input})
-        with st.chat_message("user", avatar="👤 user-avatar"):
+        with st.chat_message("user", avatar="👤"):
             st.markdown(f"<div class='user-bubble'>{user_input}</div>", unsafe_allow_html=True)
 
         # Check for special queries
@@ -394,7 +394,7 @@ def main():
 
         # Show assistant's response
         st.session_state["chat_history"].append({"role": "assistant", "content": assistant_response})
-        with st.chat_message("assistant", avatar="🤖 assistant-avatar"):
+        with st.chat_message("assistant", avatar="🤖"):
             st.markdown(f"<div class='assistant-bubble'>{assistant_response}</div>", unsafe_allow_html=True)
 
 
