@@ -11,6 +11,12 @@ from sympy.parsing.sympy_parser import parse_expr
 import numpy as np
 from langchain_groq import ChatGroq
 
+# -------------- OCR --------------
+# Make sure to install: pytesseract and Pillow
+# Also, Tesseract OCR must be installed on your system (apt-get install tesseract-ocr, etc.)
+import pytesseract
+from PIL import Image
+
 # ==============================
 #      CONFIGURATION
 # ==============================
@@ -104,13 +110,13 @@ def handle_special_queries(user_text: str, chat_history: list) -> str or None:
     if "who created this chatbot" in text_lower:
         if "short" in text_lower:
             return (
-                "**Short Answer**: This chatbot was created by Nandesh Kalashetti, "
+                "🤖 **Short Answer**: This chatbot was created by Nandesh Kalashetti, "
                 "a Full-Stack Web/Gen-AI Developer."
             )
         else:
             # Long version
             return (
-                "Nandesh Kalashetti is a Full-Stack Web/Gen-AI Developer. You can reach out to him via email at "
+                "🤖 Nandesh Kalashetti is a Full-Stack Web/Gen-AI Developer. You can reach out to him via email at "
                 "nandeshkalshetti1@gmail.com or give him a call at 9420732657. He is located in Samarth Nagar, "
                 "Akkalkot. For more information, you can visit his portfolio at "
                 "nandesh-kalashettiportfilio2386.netlify.app or check out his GitHub profile at "
@@ -144,9 +150,9 @@ nest_asyncio.apply()
 
 def main():
     st.set_page_config(
-        page_title="Cosmic Math Universe",
+        page_title="Math Wizard + Image OCR",
         layout="wide",
-        page_icon="🧮"
+        page_icon="🔮"
     )
 
     # ===========================
@@ -160,14 +166,14 @@ def main():
     }
     body {
         /* Vibrant gradient background */
-        background: linear-gradient(120deg, #f093fb, #f5576c);
+        background: linear-gradient(135deg, #a8edea, #fed6e3);
         margin: 0;
         padding: 0;
     }
     .chat-container {
         max-width: 950px;
         margin: 40px auto;
-        background: black;
+        background: rgba(255,255,255,0.95);
         border-radius: 24px;
         padding: 30px;
         box-shadow: 0 8px 32px rgba(0,0,0,0.2);
@@ -175,18 +181,16 @@ def main():
     }
     .chat-title {
         text-align: center;
-        color: #ffffff;
+        color: #333333;
         font-size: 3rem;
         font-weight: 700;
         margin-bottom: 12px;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
     }
     .chat-subtitle {
         text-align: center;
-        color: #ffffff;
+        color: #555555;
         font-size: 1.2rem;
         margin-bottom: 20px;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     }
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(20px); }
@@ -198,7 +202,7 @@ def main():
         font-size: 1rem !important;
     }
     .user-bubble {
-        background-color: #9b59b6; /* Rich purple for user messages */
+        background-color: #9b59b6;
         color: #fff;
         padding: 12px 18px;
         border-radius: 16px;
@@ -211,7 +215,7 @@ def main():
         margin-bottom: 6px;
     }
     .assistant-bubble {
-        background-color: #fdfdfd;
+        background-color: #fefefe;
         color: #333;
         padding: 12px 18px;
         border-radius: 16px;
@@ -224,7 +228,7 @@ def main():
         margin-bottom: 6px;
     }
     [data-testid="stSidebar"] {
-        background-color: rgba(44,62,80,0.95) !important;
+        background-color: rgba(44,62,80,0.9) !important;
     }
     .modern-search-title {
         color: #ffffff;
@@ -232,24 +236,17 @@ def main():
         margin-bottom: 5px;
         text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     }
-    .modern-search-input {
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        padding: 8px;
-        width: 100%;
-        font-size: 0.95rem;
-        margin-bottom: 10px;
-    }
-    .modern-search-input:focus {
-        outline: none;
-        border-color: #9b59b6;
-        box-shadow: 0 0 3px rgba(155,89,182,0.5);
-    }
     .modern-history-title {
         color: #ffffff;
         font-size: 1.1rem;
         margin-top: 15px;
         text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    }
+    .image-upload-label {
+        color: #ffffff;
+        font-size: 1.1rem;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        margin-top: 20px;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -258,19 +255,19 @@ def main():
     #       SIDEBAR
     # ===========================
     with st.sidebar:
-        st.title("Cosmic Math Universe")
+        st.title("Math Wizard + Image OCR")
         st.markdown("""
-**A cosmic mathematics platform** with:
-- Rigorous, step-by-step solutions in LaTeX
-- Dynamic Plotly visualizations
-- Multi-turn context-aware conversation
-- Quick reference to math concepts
-
+**Features**:
+- 🤖 **Chat-based** math solver with step-by-step solutions
+- 🖼️ **Image OCR** to extract and solve questions from images
+- 📚 **Formula references** for classes 11, 12, and engineering
+- 📈 **Plotly** for dynamic graphing
 ---
 """)
+
         # Modern search for math concepts
         st.markdown("<div class='modern-search-title'>Explore Key Formulas & Concepts</div>", unsafe_allow_html=True)
-        concept_query = st.text_input("", placeholder="Type e.g. 'derivative rules' or 'class 12 formulas'...")
+        concept_query = st.text_input("", placeholder="E.g. 'derivative rules', 'class 12 formulas'...")
         if concept_query:
             lower_query = concept_query.strip().lower()
             if lower_query in MATH_CONCEPTS:
@@ -293,15 +290,15 @@ def main():
         st.markdown("---")
         if st.button("New Chat"):
             st.session_state.pop("chat_history", None)
-            st.success("New conversation started!")
+            st.success("New conversation started! 🆕")
 
     # ===========================
     #    MAIN CHAT CONTAINER
     # ===========================
     st.markdown("""
     <div class='chat-container'>
-      <h1 class='chat-title'>Cosmic Math Universe</h1>
-      <p class='chat-subtitle'>Ask advanced math questions, request visualizations, or browse helpful formulas.</p>
+      <h1 class='chat-title'>Math Wizard + Image OCR</h1>
+      <p class='chat-subtitle'>Type your math questions, or upload an image with a problem. Enjoy step-by-step solutions!</p>
     """, unsafe_allow_html=True)
 
     if "chat_history" not in st.session_state:
@@ -319,9 +316,35 @@ def main():
     st.markdown("</div>", unsafe_allow_html=True)
 
     # ===========================
+    #       IMAGE UPLOAD
+    # ===========================
+    st.markdown("<div class='image-upload-label'>Or upload an image with your question:</div>", unsafe_allow_html=True)
+    uploaded_image = st.file_uploader("", type=["png","jpg","jpeg"])
+    if uploaded_image is not None:
+        # Perform OCR
+        try:
+            img = Image.open(uploaded_image)
+            extracted_text = pytesseract.image_to_string(img)
+            if extracted_text.strip():
+                # Show extracted text to user
+                st.success(f"📷 **Extracted Question**:\n\n{extracted_text.strip()}")
+                # Option to confirm or discard
+                if st.button("Use This as My Question"):
+                    # Add as a user query
+                    st.session_state["chat_history"].append({"role": "user", "content": extracted_text})
+                    with st.chat_message("user"):
+                        st.markdown(f"<div class='user-bubble'>{extracted_text}</div>", unsafe_allow_html=True)
+            else:
+                st.warning("Could not detect any text in the image. Try a clearer image or typed text.")
+        except Exception as e:
+            st.error(f"Error reading image: {e}")
+
+    st.markdown("---")
+
+    # ===========================
     #       CHAT INPUT
     # ===========================
-    user_input = st.chat_input("Type your math question here (e.g., 'Solve x^2=4' or 'Plot x^2 from -2 to 2')")
+    user_input = st.chat_input("Or type your question here (e.g., 'Solve x^2=4' or 'Plot x^2 from -2 to 2')")
 
     if user_input and user_input.strip():
         # Display user's message
