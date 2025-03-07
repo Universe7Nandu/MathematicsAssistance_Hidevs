@@ -6,3 +6,4 @@ sympy>=1.9
 numpy>=1.23.5
 pytesseract
 tesseract
+pillow
