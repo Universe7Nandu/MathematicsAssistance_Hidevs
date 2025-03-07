@@ -16,7 +16,9 @@ from langchain_groq import ChatGroq
 # ==============================
 GROQ_API_KEY = "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"
 
-# A simple knowledge base for math concepts (for sidebar search)
+# ==============================
+#  EXTENDED KNOWLEDGE BASE
+# ==============================
 MATH_CONCEPTS = {
     "derivative rules": """
 **Derivative Rules** (Reference):
@@ -40,6 +42,30 @@ For a right triangle with legs \\(a\\) and \\(b\\) and hypotenuse \\(c\\):
 \\[
 a^2 + b^2 = c^2.
 \\]
+""",
+    "class 11 formulas": """
+**Class 11 Formulas**:
+1. **Trigonometry**: \\(\\sin^2 \\theta + \\cos^2 \\theta = 1\\)
+2. **Quadratic Equations**: For \\(ax^2 + bx + c = 0\\), \\(x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}\\)
+3. **Permutations**: Number of permutations of n distinct objects is \\(n!\\)
+4. **Combinations**: Number of ways to choose r from n is \\(\\binom{n}{r} = \\frac{n!}{r!(n-r)!}\\)
+5. **Binomial Theorem**: \\((1 + x)^n = \\sum_{k=0}^{n} \\binom{n}{k} x^k\\)
+""",
+    "class 12 formulas": """
+**Class 12 Formulas**:
+1. **Differentiation**: \\(\\frac{d}{dx}[\\sin x] = \\cos x,\\, \\frac{d}{dx}[\\cos x] = -\\sin x\\)
+2. **Integration**: \\(\\int \\sin x\\, dx = -\\cos x + C,\\, \\int \\cos x\\, dx = \\sin x + C\\)
+3. **Probability**: For independent events A and B, \\(P(A \\cap B) = P(A)P(B)\\)
+4. **Continuity & Differentiability**: A function f(x) is continuous at x=a if \\(\\lim_{x \\to a} f(x) = f(a)\\).
+5. **Matrices**: If A is an invertible matrix, \\(A^{-1} A = I\\).
+""",
+    "engineering formulas": """
+**Engineering Formulas** (Reference):
+1. **Ohm's Law**: \\(V = IR\\)
+2. **Bernoulli's Principle**: \\(p + \\frac{1}{2}\\rho v^2 + \\rho g h = \\text{constant}\\)
+3. **Hooke's Law**: \\(F = k x\\)
+4. **Stress & Strain**: \\(\\sigma = \\frac{F}{A},\\, \\epsilon = \\frac{\\Delta L}{L}\\)
+5. **Kinematics**: \\(v = u + at,\\, s = ut + \\frac{1}{2}at^2\\)
 """
 }
 
@@ -101,7 +127,6 @@ def handle_special_queries(user_text: str, chat_history: list) -> str or None:
 
     # 2. "What's my previous question?" or "What was my previous question?"
     if "what's my previous question" in text_lower or "what was my previous question" in text_lower:
-        # Find the most recent user query prior to this one
         last_user_query = get_last_user_query(chat_history)
         if last_user_query is None:
             return "You haven't asked any previous question yet."
@@ -115,8 +140,6 @@ def get_last_user_query(chat_history: list) -> str or None:
     Scans chat_history from the end to find the most recent user message 
     (excluding the very last one, which is the current user query).
     """
-    # The new user query is always appended at the end with role="user".
-    # So we want the user query before that.
     if len(chat_history) < 2:
         return None
 
@@ -149,30 +172,30 @@ def main():
         font-family: 'Inter', sans-serif;
     }
     body {
-        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        background: linear-gradient(120deg, #0f2027, #203a43, #2c5364);
         margin: 0;
         padding: 0;
     }
     .chat-container {
         max-width: 950px;
         margin: 40px auto;
-        background: rgba(255,255,255,0.97);
-        border-radius: 16px;
-        padding: 25px;
+        background: rgba(255,255,255,0.95);
+        border-radius: 24px;
+        padding: 30px;
         box-shadow: 0 8px 32px rgba(0,0,0,0.2);
         animation: fadeIn 1s ease-in-out;
     }
     .chat-title {
         text-align: center;
         color: #ffffff;
-        font-size: 2.6rem;
+        font-size: 3rem;
         font-weight: 700;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
     }
     .chat-subtitle {
         text-align: center;
-        color: #e0e0e0;
-        font-size: 1.1rem;
+        color: #f0f0f0;
+        font-size: 1.2rem;
         margin-bottom: 20px;
     }
     @keyframes fadeIn {
@@ -185,25 +208,33 @@ def main():
         font-size: 1rem !important;
     }
     .user-bubble {
-        background-color: #3498DB;
+        background-color: #2980B9;
         color: #fff;
         padding: 12px 18px;
-        border-radius: 12px;
+        border-radius: 16px;
         margin-left: auto;
         max-width: 80%;
-        font-size: 1rem;
+        font-size: 1.05rem;
+        line-height: 1.5;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        margin-top: 6px;
+        margin-bottom: 6px;
     }
     .assistant-bubble {
         background-color: #ECF0F1;
         color: #333;
         padding: 12px 18px;
-        border-radius: 12px;
+        border-radius: 16px;
         margin-right: auto;
         max-width: 80%;
-        font-size: 1rem;
+        font-size: 1.05rem;
+        line-height: 1.5;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        margin-top: 6px;
+        margin-bottom: 6px;
     }
     [data-testid="stSidebar"] {
-        background-color: rgba(44,62,80,0.95) !important;
+        background-color: rgba(44,62,80,0.9) !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -230,7 +261,20 @@ def main():
             if lower_query in MATH_CONCEPTS:
                 st.markdown(MATH_CONCEPTS[lower_query])
             else:
-                st.warning("Concept not found. Try 'derivative rules' or 'integration rules'.")
+                st.warning("Concept not found. Try 'derivative rules', 'class 11 formulas', etc.")
+
+        st.markdown("---")
+        st.subheader("Conversation History")
+        if "chat_history" in st.session_state and st.session_state["chat_history"]:
+            # Show only user queries
+            user_queries = [item["content"] for item in st.session_state["chat_history"] if item["role"] == "user"]
+            if user_queries:
+                for i, q in enumerate(user_queries, 1):
+                    st.markdown(f"**{i}.** {q}")
+            else:
+                st.info("No user queries yet.")
+        else:
+            st.info("No conversation history yet.")
 
         st.markdown("---")
         if st.button("New Chat"):
@@ -282,7 +326,7 @@ def main():
             plot_figure = None
             parsed_plot = parse_plot_command(user_input)
             if parsed_plot:
-                plot_figure = generate_plot(*parsed_plot)  # (expr, x_min, x_max)
+                plot_figure = generate_plot(*parsed_plot)
                 plot_generated = True
 
             with st.spinner("Processing your request..."):
