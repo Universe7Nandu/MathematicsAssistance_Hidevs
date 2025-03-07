@@ -146,7 +146,7 @@ nest_asyncio.apply()
 
 def main():
     st.set_page_config(
-        page_title="Math Wizard + Image OCR",
+        page_title="EasyStep-Math😊",
         layout="wide",
         page_icon="🔮"
     )
@@ -197,7 +197,7 @@ def main():
         font-size: 1rem !important;
     }
     .user-bubble {
-        background-color: #9b59b6;
+        background-color:#bd4e1e;
         color: #fff;
         padding: 12px 18px;
         border-radius: 16px;
@@ -249,7 +249,7 @@ def main():
     #       SIDEBAR
     # ===========================
     with st.sidebar:
-        st.title("Math Wizard + Image OCR 🪄")
+        st.title("EasyStep-Math😊 🪄")
         st.markdown("""
 **Features**:
 - 🤖 **Chat-based** math solver with moderate explanations
@@ -310,7 +310,7 @@ def main():
     # ===========================
     st.markdown("""
     <div class='chat-container'>
-      <h1 class='chat-title'>Math Wizard + Image OCR</h1>
+      <h1 class='chat-title'>EasyStep-Math😊</h1>
       <p class='chat-subtitle'>Type your math questions below, or upload an image in the sidebar. I'll respond with moderate detail and a friendly tone! 🤓</p>
     """, unsafe_allow_html=True)
 
