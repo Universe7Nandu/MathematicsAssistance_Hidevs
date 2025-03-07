@@ -77,20 +77,20 @@ a^2 + b^2 = c^2.
 #    IMPROVED SYSTEM PROMPT
 # ==============================
 SYSTEM_PROMPT = """
-You are a friendly yet knowledgeable mathematics tutor who responds with moderate detail and uses light emojis to keep the conversation engaging. 
+You are a friendly yet knowledgeable mathematics tutor who responds with moderate detail and uses light emojis to keep the conversation engaging.
 
 Guidelines:
-1. If the user just greets you (e.g., "hi", "hello"), greet them politely back (e.g., "Hello there! 👋") and wait for an actual math question. 
-2. When the user asks a math question, provide a clear, step-by-step explanation with LaTeX formatting for expressions. 
-3. Keep answers moderately detailed (not too short, not overly lengthy). 
-4. If there are multiple ways to solve a problem, briefly mention them. 
-5. Always provide a final answer in **bold** or with a special highlight. 
-6. Keep the tone friendly and professional, with occasional emojis to add warmth (e.g., "Sure thing! 🤓"). 
+1. If the user just greets you (e.g., "hi", "hello"), greet them politely back (e.g., "Hello there! 👋") and wait for an actual math question.
+2. When the user asks a math question, provide a clear, step-by-step explanation with LaTeX formatting for expressions.
+3. Keep answers moderately detailed (not too short, not overly lengthy).
+4. If there are multiple ways to solve a problem, briefly mention them.
+5. Always provide a final answer in **bold** or with a special highlight.
+6. Keep the tone friendly and professional, with occasional emojis to add warmth (e.g., "Sure thing! 🤓").
 7. If uncertain about the answer, say so and suggest possible directions.
 
 Remember:
-- You can also handle advanced math topics (differential geometry, topology, etc.) but only if the user specifically asks. 
-- Use LaTeX in $$...$$ for display math, and \\(...\\) for inline math. 
+- You can also handle advanced math topics (differential geometry, topology, etc.) but only if the user specifically asks.
+- Use LaTeX in $$...$$ for display math, and \\(...\\) for inline math.
 - Keep your conversation user-friendly and responsive to their exact question or greeting.
 
 Let's begin!
@@ -237,11 +237,10 @@ def main():
         margin-top: 15px;
         text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     }
-    .image-upload-label {
-        color: #333;
-        font-size: 1.1rem;
-        margin-top: 20px;
-        font-weight: 600;
+    .upload-icon {
+        font-size: 1.3rem;
+        color: #ffffff;
+        margin-right: 8px;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -282,6 +281,26 @@ def main():
             st.info("No conversation history yet.")
 
         st.markdown("---")
+        st.markdown("<div class='modern-history-title'><span class='upload-icon'>🖼️</span>Upload Image</div>", unsafe_allow_html=True)
+        uploaded_image = st.file_uploader("", type=["png","jpg","jpeg"])
+        if uploaded_image is not None:
+            try:
+                img = Image.open(uploaded_image)
+                extracted_text = pytesseract.image_to_string(img)
+                if extracted_text.strip():
+                    st.success(f"**Extracted Question**:\n\n{extracted_text.strip()}")
+                    if st.button("Use This as My Question"):
+                        # Add to chat history as user
+                        st.session_state["chat_history"].append({"role": "user", "content": extracted_text})
+                        # Also show it in the main chat container
+                        with st.chat_message("user"):
+                            st.markdown(f"<div class='user-bubble'>{extracted_text}</div>", unsafe_allow_html=True)
+                else:
+                    st.warning("No readable text detected. Try a clearer image.")
+            except Exception as e:
+                st.error(f"Error reading image: {e}")
+
+        st.markdown("---")
         if st.button("New Chat"):
             st.session_state.pop("chat_history", None)
             st.success("New conversation started! 🆕")
@@ -292,13 +311,13 @@ def main():
     st.markdown("""
     <div class='chat-container'>
       <h1 class='chat-title'>Math Wizard + Image OCR</h1>
-      <p class='chat-subtitle'>Type your math questions, or upload an image with a problem. I'll respond with moderate detail and a friendly tone! 🤓</p>
+      <p class='chat-subtitle'>Type your math questions below, or upload an image in the sidebar. I'll respond with moderate detail and a friendly tone! 🤓</p>
     """, unsafe_allow_html=True)
 
     if "chat_history" not in st.session_state:
         st.session_state["chat_history"] = []
 
-    # Display conversation history
+    # Display conversation
     for msg in st.session_state["chat_history"]:
         if msg["role"] == "user":
             with st.chat_message("user"):
@@ -310,38 +329,17 @@ def main():
     st.markdown("</div>", unsafe_allow_html=True)
 
     # ===========================
-    #       IMAGE UPLOAD
-    # ===========================
-    st.markdown("<div class='image-upload-label'>Upload an image with your question (optional):</div>", unsafe_allow_html=True)
-    uploaded_image = st.file_uploader("", type=["png","jpg","jpeg"])
-    if uploaded_image is not None:
-        try:
-            img = Image.open(uploaded_image)
-            extracted_text = pytesseract.image_to_string(img)
-            if extracted_text.strip():
-                st.success(f"📷 **Extracted Question**:\n\n{extracted_text.strip()}")
-                if st.button("Use This as My Question"):
-                    st.session_state["chat_history"].append({"role": "user", "content": extracted_text})
-                    with st.chat_message("user"):
-                        st.markdown(f"<div class='user-bubble'>{extracted_text}</div>", unsafe_allow_html=True)
-            else:
-                st.warning("Could not detect any text in the image. Try a clearer image or typed text.")
-        except Exception as e:
-            st.error(f"Error reading image: {e}")
-
-    st.markdown("---")
-
-    # ===========================
     #       CHAT INPUT
     # ===========================
-    user_input = st.chat_input("Or type your question/greeting here (e.g. 'Hi', 'Solve x^2=4', 'Plot x^2 from -2 to 2')")
+    user_input = st.chat_input("Type your math question or greeting here...")
 
     if user_input and user_input.strip():
+        # Show user's message
         st.session_state["chat_history"].append({"role": "user", "content": user_input})
         with st.chat_message("user"):
             st.markdown(f"<div class='user-bubble'>{user_input}</div>", unsafe_allow_html=True)
 
-        # Check if user asked a special query
+        # Check for special queries
         special_reply = handle_special_queries(user_input, st.session_state["chat_history"])
         if special_reply is not None:
             assistant_response = special_reply
@@ -358,6 +356,7 @@ def main():
                 messages = [{"role": "system", "content": SYSTEM_PROMPT}]
                 for entry in st.session_state["chat_history"]:
                     messages.append({"role": entry["role"], "content": entry["content"]})
+
                 llm = ChatGroq(
                     temperature=0.7,
                     groq_api_key=GROQ_API_KEY,
@@ -373,9 +372,11 @@ def main():
                 st.plotly_chart(plot_figure, use_container_width=True)
                 assistant_response += "\n\n(Generated a dynamic Plotly graph based on your request.)"
 
+        # Show assistant's response
         st.session_state["chat_history"].append({"role": "assistant", "content": assistant_response})
         with st.chat_message("assistant"):
             st.markdown(f"<div class='assistant-bubble'>{assistant_response}</div>", unsafe_allow_html=True)
+
 
 # ===========================
 #    PLOT HELPER FUNCTIONS
