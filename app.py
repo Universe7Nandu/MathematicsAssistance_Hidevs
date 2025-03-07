@@ -10,6 +10,9 @@ import sympy
 from sympy.parsing.sympy_parser import parse_expr
 import numpy as np
 from langchain_groq import ChatGroq
+import pysqlite3
+import sys
+sys.modules["sqlite3"] = pysqlite3
 
 # ==============================
 #      CONFIGURATION
