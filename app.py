@@ -71,17 +71,18 @@ Let’s begin our conversation!
 # ==============================
 #   SPECIAL QUERY HANDLER
 # ==============================
-def handle_special_queries(user_text: str) -> str or None:
+def handle_special_queries(user_text: str, chat_history: list) -> str or None:
     """
-    If user specifically asks 'Who created this chatbot?', respond with 
-    details about Nandesh Kalashetti. Provide a shorter or longer version 
-    depending on whether the user includes the word 'short' or 'long'.
-    Otherwise, return None.
+    1. If user specifically asks "Who created this chatbot?", respond with details 
+       about Nandesh Kalashetti (short or long version).
+    2. If user asks "What's my previous question?" or "What was my previous question?",
+       respond with the last user query from conversation history if it exists.
+    3. Otherwise, return None so the LLM can handle it.
     """
     text_lower = user_text.lower()
 
+    # 1. "Who created this chatbot?" (short or long)
     if "who created this chatbot" in text_lower:
-        # Check if user also says 'short'
         if "short" in text_lower:
             return (
                 "**Short Answer**: This chatbot was created by Nandesh Kalashetti, "
@@ -98,6 +99,32 @@ def handle_special_queries(user_text: str) -> str or None:
                 "and you can connect with him on LinkedIn at linkedin.com/in/nandesh-kalashetti-333a78250."
             )
 
+    # 2. "What's my previous question?" or "What was my previous question?"
+    if "what's my previous question" in text_lower or "what was my previous question" in text_lower:
+        # Find the most recent user query prior to this one
+        last_user_query = get_last_user_query(chat_history)
+        if last_user_query is None:
+            return "You haven't asked any previous question yet."
+        else:
+            return f"Your previous question was: \"{last_user_query}\""
+
+    return None
+
+def get_last_user_query(chat_history: list) -> str or None:
+    """
+    Scans chat_history from the end to find the most recent user message 
+    (excluding the very last one, which is the current user query).
+    """
+    # The new user query is always appended at the end with role="user".
+    # So we want the user query before that.
+    if len(chat_history) < 2:
+        return None
+
+    # We'll skip the very last entry because that's the current user query
+    for i in range(len(chat_history) - 2, -1, -1):
+        entry = chat_history[i]
+        if entry["role"] == "user":
+            return entry["content"]
     return None
 
 # ==============================
@@ -244,8 +271,8 @@ def main():
         with st.chat_message("user"):
             st.markdown(f"<div class='user-bubble'>{user_input}</div>", unsafe_allow_html=True)
 
-        # Check if user asked a special query (e.g. who created the chatbot?)
-        special_reply = handle_special_queries(user_input)
+        # Check if user asked a special query
+        special_reply = handle_special_queries(user_input, st.session_state["chat_history"])
         if special_reply is not None:
             # We skip the LLM and respond with the special reply
             assistant_response = special_reply
