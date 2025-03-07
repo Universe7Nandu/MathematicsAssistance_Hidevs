@@ -13,7 +13,7 @@ from langchain_groq import ChatGroq
 
 # -------------- OCR --------------
 import pytesseract
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 
 # ==============================
 #      CONFIGURATION
@@ -193,6 +193,17 @@ def main():
         padding: 15px !important;
         font-size: 1rem !important;
     }
+    /* Avatars with emojis for user & assistant */
+    .user-avatar::before {
+        content: "👤 ";
+        font-size: 1.2rem;
+        margin-right: 5px;
+    }
+    .assistant-avatar::before {
+        content: "🤖 ";
+        font-size: 1.2rem;
+        margin-right: 5px;
+    }
     .user-bubble {
         background-color:#bd4e1e;
         color: #fff;
@@ -256,6 +267,7 @@ def main():
 ---
 """)
 
+        # Searching for math concepts
         st.markdown("<div class='modern-search-title'>Explore Key Formulas & Concepts</div>", unsafe_allow_html=True)
         concept_query = st.text_input("", placeholder="E.g. 'derivative rules', 'class 12 formulas'...")
         if concept_query:
@@ -266,6 +278,8 @@ def main():
                 st.warning("Concept not found. Try 'derivative rules', 'class 11 formulas', etc.")
 
         st.markdown("---")
+
+        # Conversation History
         st.markdown("<div class='modern-history-title'>Conversation History</div>", unsafe_allow_html=True)
         if "chat_history" in st.session_state and st.session_state["chat_history"]:
             user_queries = [item["content"] for item in st.session_state["chat_history"] if item["role"] == "user"]
@@ -278,26 +292,33 @@ def main():
             st.info("No conversation history yet.")
 
         st.markdown("---")
+
+        # Image Upload
         st.markdown("<div class='modern-history-title'><span class='upload-icon'>🖼️</span>Upload Image</div>", unsafe_allow_html=True)
         uploaded_image = st.file_uploader("", type=["png","jpg","jpeg"])
         if uploaded_image is not None:
             try:
                 img = Image.open(uploaded_image)
-                extracted_text = pytesseract.image_to_string(img)
-                if extracted_text.strip():
-                    st.success(f"**Extracted Question**:\n\n{extracted_text.strip()}")
-                    if st.button("Use This as My Question"):
-                        # Add to chat history as user
-                        st.session_state["chat_history"].append({"role": "user", "content": extracted_text})
-                        # Also show it in the main chat container
-                        with st.chat_message("user"):
-                            st.markdown(f"<div class='user-bubble'>{extracted_text}</div>", unsafe_allow_html=True)
-                else:
-                    st.warning("No readable text detected. Try a clearer image.")
+                try:
+                    extracted_text = pytesseract.image_to_string(img)
+                    if extracted_text.strip():
+                        st.success(f"**Extracted Question**:\n\n{extracted_text.strip()}")
+                        if st.button("Use This as My Question"):
+                            st.session_state["chat_history"].append({"role": "user", "content": extracted_text})
+                            with st.chat_message("user", avatar="👤 user-avatar"):
+                                st.markdown(f"<div class='user-bubble'>{extracted_text}</div>", unsafe_allow_html=True)
+                    else:
+                        st.warning("No readable text detected. Try a clearer image.")
+                except pytesseract.pytesseract.TesseractNotFoundError:
+                    st.error("Tesseract is not installed or not in your PATH. Please install it to use OCR.")
+            except UnidentifiedImageError:
+                st.error("Could not identify the image. Please upload a valid PNG/JPG/JPEG.")
             except Exception as e:
                 st.error(f"Error reading image: {e}")
 
         st.markdown("---")
+
+        # New Chat
         if st.button("New Chat"):
             st.session_state.pop("chat_history", None)
             st.success("New conversation started! 🆕")
@@ -317,10 +338,12 @@ def main():
     # Display conversation
     for msg in st.session_state["chat_history"]:
         if msg["role"] == "user":
-            with st.chat_message("user"):
+            # Show user message with user avatar
+            with st.chat_message("user", avatar="👤 user-avatar"):
                 st.markdown(f"<div class='user-bubble'>{msg['content']}</div>", unsafe_allow_html=True)
         else:
-            with st.chat_message("assistant"):
+            # Show assistant message with assistant avatar
+            with st.chat_message("assistant", avatar="🤖 assistant-avatar"):
                 st.markdown(f"<div class='assistant-bubble'>{msg['content']}</div>", unsafe_allow_html=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
@@ -333,7 +356,7 @@ def main():
     if user_input and user_input.strip():
         # Show user's message
         st.session_state["chat_history"].append({"role": "user", "content": user_input})
-        with st.chat_message("user"):
+        with st.chat_message("user", avatar="👤 user-avatar"):
             st.markdown(f"<div class='user-bubble'>{user_input}</div>", unsafe_allow_html=True)
 
         # Check for special queries
@@ -371,7 +394,7 @@ def main():
 
         # Show assistant's response
         st.session_state["chat_history"].append({"role": "assistant", "content": assistant_response})
-        with st.chat_message("assistant"):
+        with st.chat_message("assistant", avatar="🤖 assistant-avatar"):
             st.markdown(f"<div class='assistant-bubble'>{assistant_response}</div>", unsafe_allow_html=True)
 
 
