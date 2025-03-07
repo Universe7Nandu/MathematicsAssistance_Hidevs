@@ -167,7 +167,7 @@ def main():
     .chat-container {
         max-width: 950px;
         margin: 40px auto;
-        background: rgba(255,255,255,0.95);
+        background: black;
         border-radius: 24px;
         padding: 30px;
         box-shadow: 0 8px 32px rgba(0,0,0,0.2);
