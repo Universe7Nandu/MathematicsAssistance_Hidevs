@@ -232,6 +232,7 @@ def main():
     }
     [data-testid="stSidebar"] {
         background-color: black !important;
+        border:1.5px soild white;
     }
     .modern-search-title {
         color: #ffffff;
