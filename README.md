@@ -1,4 +1,3 @@
-```markdown
 # EasyStep-Math 🪄😊
 
 **EasyStep-Math** is an interactive, enterprise-grade mathematics chatbot designed to solve math problems, generate dynamic visualizations, and even extract questions from images! Enjoy a friendly, step-by-step learning experience for everything from basic algebra to advanced calculus. 
@@ -36,9 +35,7 @@ If you’re looking for a **user-friendly** way to tackle math problems, visuali
 ├── packages.txt         # (Optional) System dependencies for Tesseract on Streamlit Cloud
 ├── README.md            # This documentation file
 └── ...
-```
 
----
 
 ## ⚙️ Installation & Setup
 
