@@ -231,7 +231,7 @@ def main():
         margin-bottom: 6px;
     }
     [data-testid="stSidebar"] {
-        background-color: rgba(44,62,80,0.9) !important;
+        background-color: black !important;
     }
     .modern-search-title {
         color: #ffffff;
