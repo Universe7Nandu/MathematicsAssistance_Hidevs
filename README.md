@@ -139,4 +139,3 @@ You can then open the app in your browser (usually at http://localhost:8501).
 **EasyStep-Math** aims to make math more approachable and fun. Whether you’re a high school student, an engineering undergrad, or just curious, we hope this project helps you explore and learn!
 
 If you have any questions, feature requests, or ideas, feel free to [contact me](mailto:nandeshkalshetti1@gmail.com). Happy problem-solving! 🌟
-```
