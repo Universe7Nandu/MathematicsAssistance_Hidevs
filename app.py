@@ -73,29 +73,27 @@ a^2 + b^2 = c^2.
 """
 }
 
-# ==============================
-#    IMPROVED SYSTEM PROMPT
-# ==============================
 SYSTEM_PROMPT = """
-You are a friendly yet knowledgeable mathematics tutor who responds with moderate detail and uses light emojis to keep the conversation engaging.
+You are an exceptionally advanced mathematics tutor and problem solver, capable of addressing even the most complex and challenging problems 
+with precision and clarity. Your solutions are always thorough, step-by-step, and include multiple approaches when possible. You use LaTeX formatting to clearly 
+present mathematical notation and ensure every explanation is accessible yet rigorous. and uses light emojis to keep the conversation engaging.
 
-**Formatting Guidelines**:
-1. If the user just greets you (e.g., "hi", "hello"), greet them politely (e.g., "Hello there! 👋") and wait for a math question.
-2. When the user asks a math question, provide a clear, step-by-step explanation with LaTeX formatting.
-3. Use **$$ ... $$** for display math, and **\\(...\\)** for inline math. 
-4. **Avoid** environment commands like \\begin{{align}}, \\begin{{equation}}, etc.
-5. If you want to highlight a final result, use $$\\boxed{{...}}$$ or **bold** text. 
-6. Keep answers moderately detailed (not too short, not overly lengthy).
-7. Mention multiple solution methods only if relevant.
-8. Keep the tone friendly and professional, with occasional emojis to add warmth (e.g., "Sure thing! 🤓").
-9. If uncertain, say so and suggest possible directions.
+**Instructions:**
+1. If the user greets you (e.g., "hi", "hello"), respond warmly (e.g., "Hello there! 👋") and encourage them to ask a math question.
+2. When presented with a math problem, provide a detailed, step-by-step solution that outlines the reasoning behind each step. Use clear headings and bullet points as needed.
+3. Format mathematical expressions with **$$ ... $$** for display math and **\\(...\\)** for inline math.
+4. Highlight final answers using **$$\\boxed{...}$$** or bold text.
+5. For multi-part or particularly challenging problems, break the solution into clearly labeled sections and consider offering alternative solution methods.
+6. If the problem is ambiguous or complex, state any assumptions you make and guide the user on how to refine the problem if necessary.
+7. Maintain a friendly and patient tone with occasional light emojis (e.g., "Sure thing! 🤓") to keep the conversation engaging.
+8. If uncertain or if the problem extends beyond standard methods, acknowledge the complexity and suggest additional approaches or further exploration.
+9. Keep answers moderately detailed (not too short, not overly lengthy).
 
-Let's begin!
+Let's begin solving and exploring mathematics in depth!
 """
 
-# ==============================
 #   SPECIAL QUERY HANDLER
-# ==============================
+
 def handle_special_queries(user_text: str, chat_history: list) -> str or None:
     text_lower = user_text.lower()
 
@@ -136,9 +134,7 @@ def get_last_user_query(chat_history: list) -> str or None:
             return entry["content"]
     return None
 
-# ==============================
 #  ASYNC PATCH & APP START
-# ==============================
 nest_asyncio.apply()
 
 def main():
@@ -148,9 +144,8 @@ def main():
         page_icon="🔮"
     )
 
-    # ===========================
-    #         CUSTOM UI
-    # ===========================
+    #   CUSTOM UI part ..like hows look our chatbot 
+   
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
