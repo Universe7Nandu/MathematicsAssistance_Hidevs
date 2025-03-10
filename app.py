@@ -26,50 +26,110 @@ GROQ_API_KEY = "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"
 MATH_CONCEPTS = {
     "derivative rules": """
 **Derivative Rules** (Reference):
-1. \\(\\frac{d}{dx}[x^n] = n x^{n-1}\\)
-2. \\(\\frac{d}{dx}[\\sin x] = \\cos x\\)
-3. \\(\\frac{d}{dx}[\\cos x] = -\\sin x\\)
-4. \\(\\frac{d}{dx}[e^x] = e^x\\)
-5. \\(\\frac{d}{dx}[\\ln x] = \\frac{1}{x}\\)
+1. $$\\frac{d}{dx}[x^n] = n\\,x^{n-1}$$
+2. $$\\frac{d}{dx}[\\sin x] = \\cos x$$
+3. $$\\frac{d}{dx}[\\cos x] = -\\sin x$$
+4. $$\\frac{d}{dx}[e^x] = e^x$$
+5. $$\\frac{d}{dx}[\\ln x] = \\frac{1}{x}$$
 """,
     "integration rules": """
 **Integration Rules** (Reference):
-1. \\(\\int x^n \\, dx = \\frac{x^{n+1}}{n+1} + C\\)
-2. \\(\\int \\sin x \\, dx = -\\cos x + C\\)
-3. \\(\\int \\cos x \\, dx = \\sin x + C\\)
-4. \\(\\int e^x \\, dx = e^x + C\\)
-5. \\(\\int \\frac{1}{x} \\, dx = \\ln|x| + C\\)
+1. $$\\int x^n\\,dx = \\frac{x^{n+1}}{n+1} + C \\quad \\text{(for } n \\neq -1\\text{)}$$
+2. $$\\int \\sin x\\,dx = -\\cos x + C$$
+3. $$\\int \\cos x\\,dx = \\sin x + C$$
+4. $$\\int e^x\\,dx = e^x + C$$
+5. $$\\int \\frac{1}{x}\\,dx = \\ln|x| + C$$
 """,
     "pythagorean theorem": """
 **Pythagorean Theorem** (Reference):
-For a right triangle with legs \\(a\\) and \\(b\\) and hypotenuse \\(c\\):
-\\[
-a^2 + b^2 = c^2.
-\\]
+For a right triangle with legs $$a$$ and $$b$$ and hypotenuse $$c$$:
+$$a^2 + b^2 = c^2$$
 """,
     "class 11 formulas": """
 **Class 11 Formulas**:
-1. **Trigonometry**: \\(\\sin^2 \\theta + \\cos^2 \\theta = 1\\)
-2. **Quadratic Equations**: For \\(ax^2 + bx + c = 0\\), \\(x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}\\)
-3. **Permutations**: Number of permutations of n distinct objects is \\(n!\\)
-4. **Combinations**: Number of ways to choose r from n is \\(\\binom{n}{r} = \\frac{n!}{r!(n-r)!}\\)
-5. **Binomial Theorem**: \\((1 + x)^n = \\sum_{k=0}^{n} \\binom{n}{k} x^k\\)
+1. **Trigonometry:**  
+   $$\\sin^2\\theta + \\cos^2\\theta = 1$$
+2. **Quadratic Equations:**  
+   For $$ax^2 + bx + c = 0$$,  
+   $$x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}$$
+3. **Permutations:**  
+   Number of arrangements of $$n$$ distinct objects:  
+   $$n!$$
+4. **Combinations:**  
+   $$\\binom{n}{r} = \\frac{n!}{r!(n-r)!}$$
+5. **Binomial Theorem:**  
+   $$(1+x)^n = \\sum_{k=0}^{n} \\binom{n}{k} x^k$$
 """,
     "class 12 formulas": """
 **Class 12 Formulas**:
-1. **Differentiation**: \\(\\frac{d}{dx}[\\sin x] = \\cos x,\\, \\frac{d}{dx}[\\cos x] = -\\sin x\\)
-2. **Integration**: \\(\\int \\sin x\\, dx = -\\cos x + C,\\, \\int \\cos x\\, dx = \\sin x + C\\)
-3. **Probability**: For independent events A and B, \\(P(A \\cap B) = P(A)P(B)\\)
-4. **Continuity & Differentiability**: A function f(x) is continuous at x=a if \\(\\lim_{x \\to a} f(x) = f(a)\\).
-5. **Matrices**: If A is an invertible matrix, \\(A^{-1} A = I\\).
+1. **Differentiation:**  
+   $$\\frac{d}{dx}[\\sin x] = \\cos x, \\quad \\frac{d}{dx}[\\cos x] = -\\sin x$$
+2. **Integration:**  
+   $$\\int \\sin x\\,dx = -\\cos x + C, \\quad \\int \\cos x\\,dx = \\sin x + C$$
+3. **Probability:**  
+   For independent events $$A$$ and $$B$$,  
+   $$P(A \\cap B) = P(A) \\times P(B)$$
+4. **Continuity & Differentiability:**  
+   A function $$f(x)$$ is continuous at $$x=a$$ if  
+   $$\\lim_{x\\to a} f(x) = f(a)$$
+5. **Matrices:**  
+   For an invertible matrix $$A$$,  
+   $$A^{-1}A = I$$
 """,
     "engineering formulas": """
 **Engineering Formulas** (Reference):
-1. **Ohm's Law**: \\(V = IR\\)
-2. **Bernoulli's Principle**: \\(p + \\frac{1}{2}\\rho v^2 + \\rho g h = \\text{constant}\\)
-3. **Hooke's Law**: \\(F = k x\\)
-4. **Stress & Strain**: \\(\\sigma = \\frac{F}{A},\\, \\epsilon = \\frac{\\Delta L}{L}\\)
-5. **Kinematics**: \\(v = u + at,\\, s = ut + \\frac{1}{2}at^2\\)
+1. **Ohm's Law:**  
+   $$V = IR$$
+2. **Bernoulli's Principle:**  
+   $$p + \\frac{1}{2}\\rho v^2 + \\rho gh = \\text{constant}$$
+3. **Hooke's Law:**  
+   $$F = kx$$
+4. **Stress & Strain:**  
+   $$\\sigma = \\frac{F}{A}, \\quad \\epsilon = \\frac{\\Delta L}{L}$$
+5. **Kinematics:**  
+   $$v = u + at, \\quad s = ut + \\frac{1}{2}at^2$$
+""",
+    "exponential & logarithm properties": """
+**Exponential & Logarithm Properties**:
+1. $$a^{m+n} = a^m \\cdot a^n$$
+2. $$a^{m-n} = \\frac{a^m}{a^n}$$
+3. $$\\log_b(xy) = \\log_b x + \\log_b y$$
+4. $$\\log_b\\left(\\frac{x}{y}\\right) = \\log_b x - \\log_b y$$
+5. $$\\log_b(x^r) = r \\log_b x$$
+""",
+    "limits": """
+**Limits & Continuity**:
+1. $$\\lim_{x\\to a} f(x) = L$$ means as $$x$$ approaches $$a$$, $$f(x)$$ approaches $$L$$.
+2. $$\\lim_{x\\to 0} \\frac{\\sin x}{x} = 1$$
+3. $$\\lim_{x\\to \\infty}\\left(1 + \\frac{1}{x}\\right)^x = e$$
+""",
+    "series & summation": """
+**Series & Summation**:
+1. **Arithmetic Series:**  
+   $$S_n = \\frac{n}{2}(a_1 + a_n)$$
+2. **Geometric Series:**  
+   If $$|r| < 1$$, then  
+   $$\\sum_{k=0}^{\\infty} ar^k = \\frac{a}{1-r}$$
+3. **Taylor Series:**  
+   $$f(x) = \\sum_{n=0}^{\\infty} \\frac{f^{(n)}(a)}{n!}(x-a)^n$$
+4. **Maclaurin Series:**  
+   (Taylor Series at $$a=0$$)  
+   $$f(x) = \\sum_{n=0}^{\\infty} \\frac{f^{(n)}(0)}{n!}x^n$$
+""",
+    "geometry formulas": """
+**Geometry Formulas**:
+1. **Area of a Circle:**  
+   $$A = \\pi r^2$$
+2. **Circumference of a Circle:**  
+   $$C = 2\\pi r$$
+3. **Area of a Triangle:**  
+   $$A = \\frac{1}{2}bh$$
+4. **Area of a Rectangle:**  
+   $$A = l \\times w$$
+5. **Volume of a Sphere:**  
+   $$V = \\frac{4}{3}\\pi r^3$$
+6. **Surface Area of a Sphere:**  
+   $$A = 4\\pi r^2$$
 """
 }
 
