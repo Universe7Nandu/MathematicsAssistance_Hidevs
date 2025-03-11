@@ -214,6 +214,19 @@ def handle_special_queries(user_text: str, chat_history: list) -> str or None:
         else:
             return f"Your previous question was: \"{last_user_query}\""
 
+    # 3. Pythagoras theorem with diagram
+    #    If the user specifically requests a Pythagoras theorem "with diagram," return an external image link.
+    if "pythagoras" in text_lower and "diagram" in text_lower:
+        return (
+            "Sure! The Pythagorean theorem states that in a right triangle, the square of the hypotenuse (the side opposite the right angle) "
+            "equals the sum of the squares of the other two sides:\n\n"
+            "$$ c^2 = a^2 + b^2 $$\n\n"
+            "where c is the length of the hypotenuse, and a and b are the lengths of the other two sides.\n\n"
+            "Here's a helpful external diagram:\n\n"
+            "![Pythagoras Theorem Diagram](https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Pythagoras_illustration.png/320px-Pythagoras_illustration.png)\n\n"
+            "Feel free to ask any follow-up questions! 🤓"
+        )
+
     return None
 
 def get_last_user_query(chat_history: list) -> str or None:
