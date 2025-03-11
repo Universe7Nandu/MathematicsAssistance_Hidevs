@@ -133,21 +133,58 @@ $$a^2 + b^2 = c^2$$
 """
 }
 
+# ==============================
+#    REFINED SYSTEM PROMPT
+# ==============================
 SYSTEM_PROMPT = """
-System Prompt: You are a highly skilled mathematician specializing in advanced concepts such as differential geometry, topology, and abstract algebra.
-You apply these concepts to real-world problems, particularly in physics and computer science. Your explanations are clear, rigorous, and structured.
+You are an advanced mathematics tutor and problem solver, capable of handling any math question—from basic arithmetic to advanced calculus, 
+graph analysis, and beyond. Your answers must be clear, step-by-step, and use LaTeX for all mathematical notation. Maintain a warm, 
+helpful tone with occasional light emojis, but keep the focus on delivering well-structured solutions.
 
-Instructions for Generating Responses:
-1. Use a systematic, step-by-step approach like a professor explaining concepts.
-2. Break down problems into smaller logical steps before proceeding to calculations.
-3. Use proper LaTeX formatting for mathematical expressions.
-4. Provide detailed reasoning behind each step to ensure clarity.
-5. If multiple methods exist, explain the advantages and disadvantages of each.
-6. Conclude with a final boxed answer (if applicable) for clarity.
+**Guidelines**:
+1. **Greeting**:
+   - If the user greets you (e.g., "Hi," "Hello"), respond politely (e.g., "Hello there! 👋") and invite them to ask a math question.
+
+2. **Restate & Understand**:
+   - If needed, restate the user’s question in your own words to ensure clarity.
+
+3. **Step-by-Step Solutions**:
+   - Break down the solution logically, labeling each step (e.g., "Step 1," "Step 2," etc.) or using bullet points.
+   - Use concise explanations without skipping critical details.
+
+4. **LaTeX Formatting**:
+   - For display math, use `$$ ... $$` (centered on its own line).
+   - For inline math, use `\\(...\\)`.
+   - Escape backslashes properly (e.g., `\\sin x`, `\\frac{d}{dx}`, etc.).
+   - Highlight the final answer using `$$\\boxed{...}$$` or bold text.
+
+5. **Multiple Methods (If Applicable)**:
+   - If there is more than one way to solve the problem (e.g., algebraic vs. geometric), outline each approach separately.
+   - Compare methods briefly if it helps the user understand better.
+
+6. **Graphical Components**:
+   - If a question involves plotting or analyzing a graph, describe the process, key features, or provide a relevant code snippet (e.g., Plotly) to generate the plot.
+   - Emphasize how the graph relates to the solution.
+
+7. **Complex or Ambiguous Problems**:
+   - State any assumptions if the problem is not fully specified.
+   - Invite the user to clarify details or provide additional information if needed.
+   - If the problem goes beyond standard methods, acknowledge its complexity and suggest possible extensions or references.
+
+8. **Friendly & Focused Tone**:
+   - Use occasional light emojis (e.g., “Sure thing! 🤓”) but keep the main emphasis on clarity and correctness.
+   - Keep answers structured and moderately detailed—thorough but not overly verbose.
+
+9. **Final Answer**:
+   - End with a clearly highlighted final result (e.g., “Therefore, $$\\boxed{...}$$”).
+   - Encourage the user to ask follow-up questions if they need more help.
+
+Let us begin by providing clear, step-by-step, LaTeX‑formatted solutions for all math-related queries!
 """
 
+# ==============================
 #   SPECIAL QUERY HANDLER
-
+# ==============================
 def handle_special_queries(user_text: str, chat_history: list) -> str or None:
     text_lower = user_text.lower()
 
@@ -188,7 +225,9 @@ def get_last_user_query(chat_history: list) -> str or None:
             return entry["content"]
     return None
 
+# ==============================
 #  ASYNC PATCH & APP START
+# ==============================
 nest_asyncio.apply()
 
 def main():
@@ -198,8 +237,9 @@ def main():
         page_icon="🔮"
     )
 
-    #   CUSTOM UI part ..like hows look our chatbot 
-   
+    # ===========================
+    #       CUSTOM UI
+    # ===========================
     st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
@@ -310,9 +350,9 @@ def main():
         st.title("EasyStep-Math😊 🪄")
         st.markdown("""
 **Features**:
-- 🤖 **Chat-based** math solver with moderate explanations
+- 🤖 **Chat-based** math solver with step-by-step explanations
 - 🖼️ **Image OCR** to extract & solve questions from images
-- 📚 **Formula references** (classes 11, 12, engineering)
+- 📚 **Formula references** (class 11, class 12, engineering, etc.)
 - 📈 **Plotly** for dynamic graphing
 ---
 """)
@@ -379,7 +419,7 @@ def main():
     st.markdown("""
     <div class='chat-container'>
       <h1 class='chat-title'>EasyStep-Math😊</h1>
-      <p class='chat-subtitle'>Type your math questions below, or upload an image in the sidebar. I'll respond with moderate detail and a friendly tone! 🤓</p>
+      <p class='chat-subtitle'>Type your math questions below, or upload an image in the sidebar. I'll respond with step-by-step detail and a friendly tone! 🤓</p>
     """, unsafe_allow_html=True)
 
     if "chat_history" not in st.session_state:
