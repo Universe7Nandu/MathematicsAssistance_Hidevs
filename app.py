@@ -218,7 +218,7 @@ def handle_special_queries(user_text: str, chat_history: list) -> str or None:
     #    If the user specifically requests a Pythagoras theorem "with diagram," return an external image link.
     if "pythagoras" in text_lower and "diagram" in text_lower:
         return (
-            "Sure! The Pythagorean theorem states that in a right triangle, the square of the hypotenuse (the side opposite the right angle) "
+            "Sure! The Pythagorean theorem states that in a right triangle, the square of the hypotenuse "
             "equals the sum of the squares of the other two sides:\n\n"
             "$$ c^2 = a^2 + b^2 $$\n\n"
             "where c is the length of the hypotenuse, and a and b are the lengths of the other two sides.\n\n"
@@ -319,19 +319,10 @@ def main():
         margin-top: 6px;
         margin-bottom: 6px;
     }
-    .assistant-bubble {
-        background-color: #fefefe;
-        color: #333;
-        padding: 12px 18px;
-        border-radius: 16px;
-        margin-right: auto;
-        max-width: 80%;
-        font-size: 1.05rem;
-        line-height: 1.5;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        margin-top: 6px;
-        margin-bottom: 6px;
-    }
+    /* 
+       For the assistant's response, we won't wrap with a .assistant-bubble div,
+       so that images (Markdown) can render properly.
+    */
     [data-testid="stSidebar"] {
         background-color: black !important;
         border:1.5px soild white;
@@ -445,9 +436,9 @@ def main():
             with st.chat_message("user", avatar="👤"):
                 st.markdown(f"<div class='user-bubble'>{msg['content']}</div>", unsafe_allow_html=True)
         else:
-            # Show assistant message with assistant avatar
+            # Show assistant message (no custom <div> so images can render)
             with st.chat_message("assistant", avatar="🤖"):
-                st.markdown(f"<div class='assistant-bubble'>{msg['content']}</div>", unsafe_allow_html=True)
+                st.markdown(msg['content'], unsafe_allow_html=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -495,11 +486,13 @@ def main():
                 st.plotly_chart(plot_figure, use_container_width=True)
                 assistant_response += "\n\n(Generated a dynamic Plotly graph based on your request.)"
 
+        # Optionally append references for further learning
+        assistant_response += "\n\n**References for Further Reading:** [Khan Academy](https://www.khanacademy.org/), [Wolfram MathWorld](https://mathworld.wolfram.com/)"
+
         # Show assistant's response
         st.session_state["chat_history"].append({"role": "assistant", "content": assistant_response})
         with st.chat_message("assistant", avatar="🤖"):
-            st.markdown(f"<div class='assistant-bubble'>{assistant_response}</div>", unsafe_allow_html=True)
-
+            st.markdown(assistant_response, unsafe_allow_html=True)
 
 # ===========================
 #    PLOT HELPER FUNCTIONS
