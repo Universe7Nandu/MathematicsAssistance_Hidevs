@@ -374,7 +374,7 @@ def main():
 
         # Searching for math concepts
         st.markdown("<div class='modern-search-title'>Explore Key Formulas & Concepts</div>", unsafe_allow_html=True)
-        concept_query = st.text_input("", placeholder="E.g. 'derivative rules', 'class 12 formulas'...")
+        concept_query = st.text_input("", placeholder="E.g. 'derivative rules', 'class 11,12 formulas','geometry formulas','exponential & logarithm properties'")
         if concept_query:
             lower_query = concept_query.strip().lower()
             if lower_query in MATH_CONCEPTS:
