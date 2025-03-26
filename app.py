@@ -19,7 +19,7 @@ from PIL import Image, UnidentifiedImageError
 # ==============================
 #      CONFIGURATION
 # ==============================
-GROQ_API_KEY = "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"
+GROQ_API_KEY = "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"
 
 # ==============================
 #  EXTENDED KNOWLEDGE BASE
