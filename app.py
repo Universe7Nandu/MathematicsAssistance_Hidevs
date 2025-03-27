@@ -485,7 +485,7 @@ def main():
                 llm = ChatGroq(
                     temperature=0.7,
                     groq_api_key=GROQ_API_KEY,
-                    model_name="mixtral-8x7b-32768"
+                    model_name="llama3-70b-819"
                 )
                 try:
                     response = asyncio.run(llm.ainvoke(messages))
