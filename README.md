@@ -102,7 +102,7 @@ You can then open the app in your browser (usually at http://localhost:8501).
 
 Watch the demo video on YouTube to see EasyStep-Math in action!
 
-[![EasyStep-Math Demo](mathstutor.jpg)](https://youtu.be/Na4wEELdA4w?feature=shared)
+[![EasyStep-Math Demo](mathtutor.jpg)](https://youtu.be/Na4wEELdA4w?feature=shared)
 
 You can click the image above or use the following link: [https://youtu.be/Na4wEELdA4w?feature=shared](https://youtu.be/Na4wEELdA4w?feature=shared)
 
